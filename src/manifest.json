@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "PureFocus",
+  "short_name": "PureFocus",
+  "version": "1.0.0",
+  "description": "Block Reels, Shorts, Explore and algorithmic home feeds on Instagram and YouTube. DMs, search, subscriptions and playback keep working.",
+  "homepage_url": "https://github.com/extrasub852-code/purefocus",
+  "minimum_chrome_version": "111",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "PureFocus",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "scripts": ["common/settings.js", "background.js"]
+  },
+  "permissions": ["storage", "declarativeNetRequest"],
+  "host_permissions": ["*://*.instagram.com/*", "*://*.youtube.com/*"],
+  "declarative_net_request": {
+    "rule_resources": [
+      { "id": "yt_shorts", "enabled": true, "path": "rules/youtube-shorts.json" },
+      { "id": "ig_reels", "enabled": true, "path": "rules/instagram-reels.json" }
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.instagram.com/*", "*://*.youtube.com/*"],
+      "exclude_matches": ["*://music.youtube.com/*", "*://studio.youtube.com/*"],
+      "js": ["content/main-world.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "exclude_matches": ["*://music.youtube.com/*", "*://studio.youtube.com/*"],
+      "css": ["content/youtube.css"],
+      "js": ["common/settings.js", "content/core.js", "content/youtube.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.instagram.com/*"],
+      "css": ["content/instagram.css"],
+      "js": ["common/settings.js", "content/core.js", "content/instagram.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "purefocus@purefocus.extension",
+      "strict_min_version": "128.0",
+      "data_collection_permissions": { "required": ["none"] }
+    },
+    "gecko_android": {
+      "strict_min_version": "128.0"
+    }
+  }
+}

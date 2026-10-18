@@ -1,0 +1,65 @@
+name: Selector broke on a site
+description: Something PureFocus should hide or redirect is showing up again.
+title: "[selector] <site>: <what is showing>"
+labels: ["bug", "selector"]
+body:
+  - type: dropdown
+    id: site
+    attributes:
+      label: Site
+      options:
+        - youtube.com (desktop)
+        - m.youtube.com (mobile)
+        - instagram.com (desktop)
+        - instagram.com (mobile web)
+    validations:
+      required: true
+  - type: dropdown
+    id: toggle
+    attributes:
+      label: Which toggle is affected?
+      options:
+        - Block Shorts
+        - Block Home Recommendations
+        - Block Reels
+        - Block Explore Grid
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Page URL
+      placeholder: https://www.youtube.com/results?search_query=...
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What is showing that should be hidden (or what broke)?
+      description: Screenshots help a lot.
+    validations:
+      required: true
+  - type: textarea
+    id: markup
+    attributes:
+      label: Element markup (optional)
+      description: Right-click the element → Inspect, then copy the outer HTML of the nearest container.
+      render: html
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 131 / Firefox 132 / Kiwi
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: PureFocus version or commit
+      placeholder: 1.0.0
+  - type: input
+    id: language
+    attributes:
+      label: Site UI language
+      description: Some fallbacks match English text only.
+      placeholder: English

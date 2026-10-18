@@ -1,0 +1,23 @@
+{
+  "name": "purefocus",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MV3 browser extension that blocks Reels, Shorts, Explore and algorithmic home feeds on Instagram and YouTube.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/extrasub852-code/purefocus.git"
+  },
+  "scripts": {
+    "lint": "web-ext lint --source-dir src",
+    "test": "node tools/check.mjs",
+    "build": "rm -rf dist && mkdir -p dist && cd src && zip -qrX ../dist/purefocus.zip . -x '.*' && cd .. && echo 'built dist/purefocus.zip'",
+    "icons": "python3 tools/generate-icons.py"
+  },
+  "devDependencies": {
+    "web-ext": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

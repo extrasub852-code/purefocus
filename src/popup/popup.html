@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>PureFocus</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="app">
+    <header class="brand">
+      <img class="brand-logo" src="../icons/icon48.png" alt="" width="36" height="36">
+      <div>
+        <h1>PureFocus</h1>
+        <p class="tagline">Keep the tools. Lose the loops.</p>
+      </div>
+    </header>
+
+    <section class="card" aria-labelledby="ig-title">
+      <h2 id="ig-title" class="card-title"><span class="site-dot site-ig" aria-hidden="true"></span>Instagram</h2>
+
+      <label class="row">
+        <span class="row-text">
+          <span class="row-label">Block Reels</span>
+          <span class="row-hint">Hides the Reels tab and tray. /reels opens your DMs.</span>
+        </span>
+        <input type="checkbox" class="toggle-input" data-key="igBlockReels">
+        <span class="toggle" aria-hidden="true"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-text">
+          <span class="row-label">Block Explore Grid</span>
+          <span class="row-hint">Hides Explore and its grid. Search keeps working.</span>
+        </span>
+        <input type="checkbox" class="toggle-input" data-key="igBlockExplore">
+        <span class="toggle" aria-hidden="true"></span>
+      </label>
+    </section>
+
+    <section class="card" aria-labelledby="yt-title">
+      <h2 id="yt-title" class="card-title"><span class="site-dot site-yt" aria-hidden="true"></span>YouTube</h2>
+
+      <label class="row">
+        <span class="row-text">
+          <span class="row-label">Block Shorts</span>
+          <span class="row-hint">Hides Shorts everywhere. Shorts links open as normal videos.</span>
+        </span>
+        <input type="checkbox" class="toggle-input" data-key="ytBlockShorts">
+        <span class="toggle" aria-hidden="true"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-text">
+          <span class="row-label">Block Home Recommendations</span>
+          <span class="row-hint">Replaces the home feed with a clean search bar.</span>
+        </span>
+        <input type="checkbox" class="toggle-input" data-key="ytBlockHome">
+        <span class="toggle" aria-hidden="true"></span>
+      </label>
+    </section>
+
+    <footer class="footer">
+      <p id="status" class="status" role="status" aria-live="polite">Changes apply instantly to open tabs.</p>
+      <p class="foss">Free &amp; open source · MIT · <span id="version"></span></p>
+    </footer>
+  </main>
+
+  <script src="../common/settings.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": { "regexSubstitution": "https://\\1instagram.com/direct/inbox/" }
+    },
+    "condition": {
+      "regexFilter": "^https?://((?:www\\.|m\\.)?)instagram\\.com/reels(?:[/?#].*)?$",
+      "resourceTypes": ["main_frame"]
+    }
+  }
+]

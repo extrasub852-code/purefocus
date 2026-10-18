@@ -1,0 +1,235 @@
+/*
+ * PureFocus — YouTube stylesheet, injected at document_start.
+ *
+ * Every rule is gated by a class on <html> set by content/youtube.js:
+ *   pf-block-shorts  "Block Shorts" toggle
+ *   pf-block-home    "Block Home Recommendations" toggle
+ *   pf-path-home     current route is the home page "/"
+ *
+ * YouTube renders with custom elements whose tag names are part of its
+ * component API (ytd-* on desktop, ytm-* on m.youtube.com, *-view-model for
+ * the newer "lockup" components). Tag names, boolean attributes such as
+ * [is-shorts] / [page-subtype] and link hrefs change far less often than
+ * class names, so they are preferred throughout.
+ *
+ * Rules using :has() are kept in separate blocks from plain selectors, because
+ * one unsupported selector invalidates a whole selector list.
+ */
+
+/* ------------------------------------------------------- Shorts: plain -- */
+
+/*
+ * ytd-reel-shelf-renderer           "Shorts" shelf in search results, the watch
+ *                                   page sidebar and older home layouts.
+ * ytd-rich-shelf-renderer[is-shorts] Shorts shelf in the desktop home /
+ *                                   subscriptions rich grid (flag attribute).
+ * ytd-reel-item-renderer            Individual short tiles (channel pages, older shelves).
+ * ytm-shorts-lockup-view-model(-v2) New-style short tile (desktop and mobile).
+ * ytm-reel-shelf-renderer           Shorts shelf on m.youtube.com.
+ * ytd-mini-guide-entry-renderer[aria-label="Shorts"]
+ *                                   Collapsed (icon-only) left nav entry; the
+ *                                   aria-label is English-only, see :has() rule
+ *                                   below for the href-based variant.
+ * yt-tab-shape[tab-title="Shorts"]  "Shorts" tab on channel pages (English UI).
+ */
+html.pf-block-shorts ytd-reel-shelf-renderer,
+html.pf-block-shorts ytd-rich-shelf-renderer[is-shorts],
+html.pf-block-shorts ytd-reel-item-renderer,
+html.pf-block-shorts ytm-shorts-lockup-view-model,
+html.pf-block-shorts ytm-shorts-lockup-view-model-v2,
+html.pf-block-shorts ytm-reel-shelf-renderer,
+html.pf-block-shorts ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+html.pf-block-shorts yt-tab-shape[tab-title="Shorts"] {
+  display: none !important;
+}
+
+/* --------------------------------------------------------- Shorts: :has -- */
+
+/*
+ * Left guide (desktop): ytd-guide-entry-renderer whose endpoint link points at
+ * /shorts or carries title="Shorts" (the entry is sometimes rendered without an
+ * href and only has the title).
+ * Mini guide (desktop, collapsed sidebar): same idea, href-based.
+ * Bottom pivot bar (m.youtube.com): ytm-pivot-bar-item-renderer whose inner
+ * tab div has class "pivot-shorts" (a semantic, non-hashed class YouTube uses
+ * to pick the icon).
+ */
+html.pf-block-shorts ytd-guide-entry-renderer:has(a[href^="/shorts"]),
+html.pf-block-shorts ytd-guide-entry-renderer:has(a#endpoint[title="Shorts"]),
+html.pf-block-shorts ytd-mini-guide-entry-renderer:has(a[href^="/shorts"]),
+html.pf-block-shorts ytm-pivot-bar-item-renderer:has(.pivot-shorts) {
+  display: none !important;
+}
+
+/*
+ * Section wrappers that only exist to hold a Shorts shelf; hiding the wrapper
+ * (not just the shelf) removes the leftover gap and section header.
+ * ytd-rich-section-renderer   desktop home / subscriptions grid section.
+ * ytm-rich-section-renderer   m.youtube.com equivalent.
+ * grid-shelf-view-model       new-style Shorts shelf in search results; only
+ *                             hidden when it contains short lockups.
+ * ytd-item-section-renderer   search result section wrapping a shorts shelf.
+ */
+html.pf-block-shorts ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
+html.pf-block-shorts ytd-rich-section-renderer:has(ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2),
+html.pf-block-shorts ytm-rich-section-renderer:has(ytm-reel-shelf-renderer, ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2),
+html.pf-block-shorts grid-shelf-view-model:has(ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2),
+html.pf-block-shorts ytd-item-section-renderer:has(> #contents > ytd-reel-shelf-renderer:only-child) {
+  display: none !important;
+}
+
+/*
+ * Single shorts mixed into ordinary lists: a video card whose thumbnail links
+ * to /shorts/<id>. Regular videos link to /watch?v=..., so they are untouched.
+ * ytd-video-renderer            search results
+ * ytd-grid-video-renderer       channel / older grid pages
+ * ytd-rich-item-renderer        home & subscriptions grid
+ * ytd-compact-video-renderer    watch-page sidebar
+ * ytm-video-with-context-renderer, ytm-compact-video-renderer, ytm-rich-item-renderer
+ *                               m.youtube.com equivalents
+ */
+html.pf-block-shorts ytd-video-renderer:has(a[href^="/shorts/"]),
+html.pf-block-shorts ytd-grid-video-renderer:has(a[href^="/shorts/"]),
+html.pf-block-shorts ytd-rich-item-renderer:has(a[href^="/shorts/"]),
+html.pf-block-shorts ytd-compact-video-renderer:has(a[href^="/shorts/"]),
+html.pf-block-shorts ytm-video-with-context-renderer:has(a[href^="/shorts/"]),
+html.pf-block-shorts ytm-compact-video-renderer:has(a[href^="/shorts/"]),
+html.pf-block-shorts ytm-rich-item-renderer:has(a[href^="/shorts/"]) {
+  display: none !important;
+}
+
+/* ------------------------------------------------------ Home feed: plain -- */
+
+/*
+ * ytd-browse[page-subtype="home"] is the desktop home page container; its
+ * ytd-rich-grid-renderer is the recommendation grid (including the topic chip
+ * bar in its header). Other browse pages (subscriptions, history, channels)
+ * have a different page-subtype and are not affected.
+ */
+html.pf-block-home ytd-browse[page-subtype="home"] ytd-rich-grid-renderer,
+html.pf-block-home ytd-browse[page-subtype="home"] ytd-two-column-browse-results-renderer {
+  display: none !important;
+}
+
+/*
+ * m.youtube.com has no page-subtype, so it is gated by the route class.
+ * ytm-rich-grid-renderer / ytm-section-list-renderer  recommendation feed
+ * ytm-feed-filter-chip-bar-renderer / ytm-chip-cloud-renderer  topic chips
+ */
+html.pf-block-home.pf-path-home ytm-browse ytm-rich-grid-renderer,
+html.pf-block-home.pf-path-home ytm-browse ytm-section-list-renderer,
+html.pf-block-home.pf-path-home ytm-feed-filter-chip-bar-renderer,
+html.pf-block-home.pf-path-home ytm-chip-cloud-renderer {
+  display: none !important;
+}
+
+/* ------------------------------------------------- Home: PureFocus panel -- */
+
+/*
+ * The panel carries its own palette instead of YouTube's --yt-spec-* variables,
+ * which are not reliably defined on every layout. html[dark] is the attribute
+ * YouTube sets on <html> when the dark theme is active.
+ */
+#pf-yt-home-panel {
+  display: none;
+  --pf-fg: #0f0f0f;
+  --pf-muted: #606060;
+  --pf-border: #d3d3d3;
+  --pf-field: #ffffff;
+  --pf-chip: #f2f2f2;
+  --pf-chip-hover: #e5e5e5;
+}
+
+html[dark] #pf-yt-home-panel {
+  --pf-fg: #f1f1f1;
+  --pf-muted: #aaaaaa;
+  --pf-border: #3f3f3f;
+  --pf-field: #121212;
+  --pf-chip: #272727;
+  --pf-chip-hover: #3f3f3f;
+}
+
+html.pf-block-home.pf-path-home #pf-yt-home-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 640px;
+  margin: 12vh auto 40px;
+  padding: 0 16px;
+  color: var(--pf-fg);
+  font-family: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+  text-align: center;
+}
+
+#pf-yt-home-panel .pf-yt-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+#pf-yt-home-panel .pf-yt-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--pf-muted);
+}
+
+#pf-yt-home-panel .pf-yt-form {
+  display: flex;
+  width: 100%;
+  margin-top: 8px;
+}
+
+#pf-yt-home-panel .pf-yt-input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--pf-border);
+  border-right: none;
+  border-radius: 22px 0 0 22px;
+  background: var(--pf-field);
+  color: inherit;
+  font-size: 16px;
+  outline: none;
+}
+
+#pf-yt-home-panel .pf-yt-input:focus {
+  border-color: #1c62b9;
+}
+
+#pf-yt-home-panel .pf-yt-button {
+  height: 44px;
+  padding: 0 22px;
+  border: 1px solid var(--pf-border);
+  border-radius: 0 22px 22px 0;
+  background: var(--pf-chip);
+  color: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#pf-yt-home-panel .pf-yt-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+#pf-yt-home-panel .pf-yt-link {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--pf-chip);
+  color: inherit;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+#pf-yt-home-panel .pf-yt-link:hover {
+  background: var(--pf-chip-hover);
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": { "regexSubstitution": "https://\\1youtube.com/watch?v=\\2" }
+    },
+    "condition": {
+      "regexFilter": "^https?://((?:www\\.|m\\.)?)youtube\\.com/shorts/([A-Za-z0-9_-]{6,})",
+      "resourceTypes": ["main_frame"]
+    }
+  }
+]

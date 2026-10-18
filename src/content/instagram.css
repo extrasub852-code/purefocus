@@ -1,0 +1,81 @@
+/*
+ * PureFocus — Instagram stylesheet, injected at document_start.
+ *
+ * Every rule is gated by a class on <html> set by content/instagram.js:
+ *   pf-block-reels    "Block Reels" toggle
+ *   pf-block-explore  "Block Explore Grid" toggle
+ *   pf-path-explore   current route is exactly /explore/
+ *
+ * Instagram's class names are hashed and change on every deploy, so these
+ * selectors rely on link targets (href), ARIA roles/labels and plain element
+ * types, which are far more stable.
+ *
+ * Rules using :has() are kept in their own blocks: a selector list containing
+ * an unsupported selector drops the entire rule, and we never want an old
+ * engine to lose the simple selectors along with it.
+ */
+
+/* ---------------------------------------------------------------- Reels -- */
+
+/*
+ * a[href="/reels/"]          Reels entry in the desktop left sidebar and in the
+ *                            mobile bottom tab bar (both link straight to /reels/).
+ * a[role="tab"][href$="/reels/"]
+ *                            "Reels" tab on profile pages (/<user>/reels/). The
+ *                            tab bar uses role="tab" anchors.
+ * [data-pf-hidden]           Suggested-reels tray found by the JS text fallback.
+ */
+html.pf-block-reels a[href="/reels/"],
+html.pf-block-reels a[role="tab"][href$="/reels/"],
+html.pf-block-reels [data-pf-hidden] {
+  display: none !important;
+}
+
+/*
+ * Home-feed "Suggested reels" tray: a feed unit (article) whose header links to
+ * the Reels feed with an exact href="/reels/". Ordinary reel posts from people
+ * you follow link to /reel/<id>/ (singular) or /reels/audio/..., so they are
+ * not matched and remain visible.
+ */
+html.pf-block-reels main article:has(a[href="/reels/"]) {
+  display: none !important;
+}
+
+/* -------------------------------------------------------------- Explore -- */
+
+/*
+ * Desktop sidebar "Explore" link: a[href="/explore/"] containing the compass
+ * icon (svg[aria-label="Explore"]). On mobile web the same href is the
+ * Search tab (magnifier icon, different aria-label) and must stay, because
+ * search lives at the top of /explore/ there.
+ */
+html.pf-block-explore a[href="/explore/"]:has(svg[aria-label="Explore"]) {
+  display: none !important;
+}
+
+/*
+ * The /explore/ grid itself: every tile is a link to a post (/p/<id>/) or a
+ * reel (/reel/<id>/) inside <main>. Hiding the tiles (and rows made only of
+ * tiles) removes the grid but leaves the search box at the top of the page.
+ */
+html.pf-block-explore.pf-path-explore main a[href^="/p/"],
+html.pf-block-explore.pf-path-explore main a[href^="/reel/"] {
+  display: none !important;
+}
+
+html.pf-block-explore.pf-path-explore main div:has(> a[href^="/p/"], > a[href^="/reel/"]) {
+  display: none !important;
+}
+
+html.pf-block-explore.pf-path-explore main::before {
+  content: "Explore grid hidden by PureFocus. Search still works.";
+  display: block;
+  margin: 24px auto;
+  padding: 14px 18px;
+  max-width: 420px;
+  border-radius: 12px;
+  background: rgba(127, 127, 127, 0.12);
+  color: inherit;
+  font: 500 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  text-align: center;
+}
