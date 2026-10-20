@@ -37,9 +37,6 @@ jobs:
       - name: Xcode version
         run: xcodebuild -version
 
-      - name: Generate Safari Xcode project from src/
-        run: tools/build-safari.sh
-
       - name: List schemes
         run: xcodebuild -list -project safari/PureFocus/PureFocus.xcodeproj
 
