@@ -40,7 +40,7 @@ jobs:
       - name: List schemes
         run: xcodebuild -list -project safari/PureFocus/PureFocus.xcodeproj
 
-      - name: Build macOS app (unsigned)
+      - name: Build macOS app (ad-hoc signed)
         run: tools/build-safari.sh --build
 
       - name: Build iOS app for simulator (unsigned)
