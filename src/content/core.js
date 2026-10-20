@@ -18,8 +18,24 @@
   const { api, STORAGE_KEY, DEFAULTS, getSettings, normalize } = globalThis.PF;
   const MUTATION_THROTTLE_MS = 150;
 
+  // Fallback for browsers that didn't run content/main-world.js in the page
+  // world. If the page CSP blocks this too, route changes are still caught by
+  // the site navigation events and the MutationObserver href check below.
+  function ensureMainWorldPatch(root) {
+    if (root.hasAttribute('data-pf-main-world')) return;
+    try {
+      const script = document.createElement('script');
+      script.src = api.runtime.getURL('content/main-world.js');
+      script.onload = script.onerror = () => script.remove();
+      (document.head ?? root).append(script);
+    } catch (err) {
+      console.warn('[PureFocus] could not inject main-world helper', err);
+    }
+  }
+
   function start(site) {
     const root = document.documentElement;
+    ensureMainWorldPatch(root);
     let settings = { ...DEFAULTS };
     let ready = false;
     let lastHref = null;

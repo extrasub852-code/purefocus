@@ -6,3 +6,9 @@ web-ext-artifacts/
 *.log
 .vscode/
 .idea/
+
+# Safari / Xcode
+safari/build/
+DerivedData/
+xcuserdata/
+*.xcuserstate

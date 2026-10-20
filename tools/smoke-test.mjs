@@ -79,6 +79,7 @@ try {
   await yt.waitForTimeout(6000);
   results.ytResultsUrl = yt.url();
   results.htmlClasses = await yt.evaluate(() => document.documentElement.className);
+  results.mainWorldMarker = await yt.evaluate(() => document.documentElement.hasAttribute('data-pf-main-world'));
   const shortHref = await yt.evaluate(() => [...document.querySelectorAll('a[href^="/shorts/"]')].map(a=>a.getAttribute('href')).find(h=>/^\/shorts\/[A-Za-z0-9_-]{6,}/.test(h)));
   results.shortHrefFound = shortHref;
   results.visibleShortsElements = await yt.evaluate(() =>

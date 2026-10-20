@@ -56,7 +56,16 @@
       "run_at": "document_start"
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content/main-world.js"],
+      "matches": ["*://*.instagram.com/*", "*://*.youtube.com/*"]
+    }
+  ],
   "browser_specific_settings": {
+    "safari": {
+      "strict_min_version": "16.4"
+    },
     "gecko": {
       "id": "purefocus@purefocus.extension",
       "strict_min_version": "128.0",
