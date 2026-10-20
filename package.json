@@ -12,7 +12,9 @@
     "lint": "web-ext lint --source-dir src",
     "test": "node tools/check.mjs",
     "build": "rm -rf dist && mkdir -p dist && cd src && zip -qrX ../dist/purefocus.zip . -x '.*' && cd .. && echo 'built dist/purefocus.zip'",
-    "icons": "python3 tools/generate-icons.py"
+    "icons": "python3 tools/generate-icons.py",
+    "safari": "bash tools/build-safari.sh",
+    "safari:build": "bash tools/build-safari.sh --build"
   },
   "devDependencies": {
     "web-ext": "^8.0.0"

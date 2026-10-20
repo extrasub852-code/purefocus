@@ -28,3 +28,20 @@ jobs:
 
       - name: Build zip
         run: npm run build
+
+  safari:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode version
+        run: xcodebuild -version
+
+      - name: List schemes
+        run: xcodebuild -list -project safari/PureFocus/PureFocus.xcodeproj
+
+      - name: Build macOS app (ad-hoc signed)
+        run: tools/build-safari.sh --build
+
+      - name: Build iOS app for simulator (unsigned)
+        run: tools/build-safari.sh --build-ios

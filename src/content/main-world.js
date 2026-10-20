@@ -9,9 +9,20 @@
  * content scripts can listen for `pf:locationchange`.
  *
  * It intentionally has no access to extension APIs and carries no data.
+ *
+ * Browsers that ignore `world: "MAIN"` (some Safari versions) run this file in
+ * the isolated world instead, where patching is useless. It then bails out
+ * without setting the DOM marker, and content/core.js re-injects it as a page
+ * <script> from web_accessible_resources.
  */
 (() => {
+  const inIsolatedWorld =
+    typeof globalThis.browser?.runtime?.id === 'string' ||
+    typeof globalThis.chrome?.runtime?.id === 'string';
+  if (inIsolatedWorld) return;
+
   const MARK = Symbol.for('purefocus.historyPatched');
+  document.documentElement?.setAttribute('data-pf-main-world', '');
   if (history[MARK]) return;
 
   const notify = () => window.dispatchEvent(new Event('pf:locationchange'));
